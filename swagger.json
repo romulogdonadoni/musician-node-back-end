@@ -73,6 +73,69 @@
           }
         }
       }
+    },
+    "/create/music": {
+      "post": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "música criada com sucesso"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "falha ao criar música"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/RequestMusic" }
+            }
+          }
+        }
+      }
+    },
+    "/get/music": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": "",
+                    "imageUrl": "",
+                    "authorName": "",
+                    "name": "",
+                    "description": "",
+                    "releaseDate": "",
+                    "musicUrl": ""
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "falha ao buscar músicas"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -103,6 +166,33 @@
           }
         },
         "required": ["username", "password"]
+      },
+      "RequestMusic": {
+        "type": "object",
+        "properties": {
+          "music": {
+            "type": "string",
+            "format": "binary"
+          },
+          "image": {
+            "type": "string",
+            "format": "binary"
+          },
+          "name": {
+            "type": "string"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "iso"
+          }
+        },
+        "required": ["music", "image", "name", "authorName", "description", "releaseDate"]
       }
     }
   }

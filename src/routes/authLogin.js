@@ -3,6 +3,7 @@ const router = express.Router();
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import jwt from "jsonwebtoken";
+import crypto from "crypto"
 
 router.post("/auth/login", async (req, res) => {
   const { username, password } = req.body;

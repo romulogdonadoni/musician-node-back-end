@@ -20,36 +20,23 @@ model User {
   email    String  @unique
   username String
   password String
-  image    String
+  image    String?
   role     Role    @default(USER)
-  album    Album[]
+  music    Music[]
 
   @@map("user")
 }
 
-model Album {
-  id           String   @id @default(uuid())
-  image        String
-  name         String
-  description  String
-  creationDate DateTime
-  author       User     @relation(fields: [authorId], references: [id])
-  authorId     String
-  music        Music[]
-
-  @@map("album")
-}
-
 model Music {
-  id           String   @id @default(uuid())
-  image        String
-  authorName   String
-  name         String
-  description  String
-  creationDate DateTime
-  src          String
-  author       Album    @relation(fields: [authorId], references: [id])
-  authorId     String
+  id          String   @id @default(uuid())
+  imageUrl    String
+  authorName  String
+  name        String
+  description String
+  releaseDate DateTime
+  musicUrl    String
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
 
   @@map("music")
 }
