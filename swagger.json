@@ -1,17 +1,21 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "API Música",
+    "title": "API Musician",
     "version": "1.0.0"
   },
   "paths": {
     "/auth/login": {
       "post": {
-        "summary": "Rota para autenticação de usuário",
-        "description": "Esta rota é usada para autenticar um usuário no sistema.",
         "responses": {
           "200": {
-            "description": "Autenticação bem-sucedida",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/RequestLogin" }
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "example": {
@@ -21,13 +25,19 @@
             }
           },
           "401": {
-            "description": "Não autorizado",
             "content": {
               "application/json": {
                 "example": {
-                  "mensagem": "Credenciais inválidas"
+                  "message": "credenciais inválidas"
                 }
               }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RequestLogin" }
             }
           }
         }
@@ -35,30 +45,64 @@
     },
     "/auth/register": {
       "post": {
-        "summary": "Rota para criação de usuário",
-        "description": "Esta rota é usada para criar um usuário no sistema.",
         "responses": {
           "200": {
-            "description": "Usuário criado com sucesso",
             "content": {
               "application/json": {
                 "example": {
-                  "mensagem": "Usuário criado com sucesso"
+                  "message": "usuário criado com sucesso"
                 }
               }
             }
           },
           "401": {
-            "description": "Falha ao criar usuário",
             "content": {
               "application/json": {
                 "example": {
-                  "mensagem": "Falha ao criar usuário"
+                  "message": "falha ao criar usuário"
                 }
               }
             }
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RequestRegister" }
+            }
+          }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestLogin": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["username", "password"]
+      },
+      "RequestRegister": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["username", "password"]
       }
     }
   }
