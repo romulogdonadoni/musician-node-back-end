@@ -1,0 +1,65 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Música",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "Rota para autenticação de usuário",
+        "description": "Esta rota é usada para autenticar um usuário no sistema.",
+        "responses": {
+          "200": {
+            "description": "Autenticação bem-sucedida",
+            "content": {
+              "application/json": {
+                "example": {
+                  "token": "seu_token_de_autenticação"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "mensagem": "Credenciais inválidas"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Rota para criação de usuário",
+        "description": "Esta rota é usada para criar um usuário no sistema.",
+        "responses": {
+          "200": {
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "mensagem": "Usuário criado com sucesso"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falha ao criar usuário",
+            "content": {
+              "application/json": {
+                "example": {
+                  "mensagem": "Falha ao criar usuário"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
