@@ -12,4 +12,4 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use("/", authRegister, authLogin, getUsers);
 
-app.listen(port, () => console.log(`Servidor rodando na porta ${process.env.PORT}`));
+app.listen(process.env.PORT, () => console.log(`Servidor rodando na porta ${process.env.PORT}`));
