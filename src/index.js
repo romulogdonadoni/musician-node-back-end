@@ -1,6 +1,5 @@
 import express from "express";
 const app = express();
-const port = 3000;
 import authRegister from "./routes/authRegister.js";
 import authLogin from "./routes/authLogin.js";
 import getUsers from "./routes/getUsers.js";
@@ -13,4 +12,4 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use("/", authRegister, authLogin, getUsers);
 
-app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
+app.listen(port, () => console.log(`Servidor rodando na porta ${process.env.PORT}`));
