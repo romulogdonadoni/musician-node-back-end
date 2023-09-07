@@ -1,22 +1,22 @@
 import express from "express";
-const router = express.Router();
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
 import multer from "multer";
 import cloudinary from "../config/cloudinaryConfig.js";
-import jwt from "jsonwebtoken";
+import authToken from "./authToken.js";
+
+const prisma = new PrismaClient();
+const router = express.Router();
 const upload = multer();
 
 router.post(
-  "/create/music",
+  "/create/music/:id",
+  authToken,
   upload.fields([
     { name: "music", maxCount: 1 },
     { name: "image", maxCount: 1 },
   ]),
   async (req, res) => {
-    const token = req.headers["authorization"].split(" ")[1];
-    const { id: authorId } = jwt.decode(token);
-    console.log(authorId);
+    const authorId = req.params["id"];
     const { authorName, name, description, releaseDate } = req.body;
     const fieldImage = req.files["image"][0];
     const fieldMusic = req.files["music"][0];
@@ -24,7 +24,7 @@ router.post(
     const uploadImage = (imageBuffer) => {
       return new Promise((resolve, reject) => {
         cloudinary.uploader
-          .upload_stream({ resource_type: "auto" }, (error, result) => {
+          .upload_stream({ resource_type: "image", folder: "MusicsImages" }, (error, result) => {
             if (error) {
               reject(error);
             } else {
@@ -40,7 +40,7 @@ router.post(
     const uploadMusic = (musicBuffer) => {
       return new Promise((resolve, reject) => {
         cloudinary.uploader
-          .upload_stream({ resource_type: "auto" }, (error, result) => {
+          .upload_stream({ resource_type: "video", folder: "Musics" }, (error, result) => {
             if (error) {
               reject(error);
             } else {

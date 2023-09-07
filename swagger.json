@@ -74,7 +74,38 @@
         }
       }
     },
-    "/create/music": {
+    "/create/album": {
+      "post": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "álbum criado com sucesso"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "falha ao criar álbum]"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/RequestAlbum" }
+            }
+          }
+        }
+      }
+    },
+    "/create/music/:id": {
       "post": {
         "responses": {
           "200": {
@@ -96,6 +127,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID do álbum a qual a música pertence",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -120,6 +162,67 @@
                     "description": "",
                     "releaseDate": "",
                     "musicUrl": ""
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "falha ao buscar músicas"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/artist": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": "",
+                    "username": "",
+                    "imageUrl": "",
+                    "album": []
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "falha ao buscar músicas"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/album": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": "",
+                    "imageUrl": "",
+                    "authorName": "",
+                    "name": "",
+                    "description": "",
+                    "releaseDate": "",
+                    "musics": []
                   }
                 ]
               }
@@ -166,6 +269,29 @@
           }
         },
         "required": ["username", "password"]
+      },
+      "RequestAlbum": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "format": "binary"
+          },
+          "name": {
+            "type": "string"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "iso"
+          }
+        },
+        "required": ["music", "image", "name", "authorName", "description", "releaseDate"]
       },
       "RequestMusic": {
         "type": "object",
