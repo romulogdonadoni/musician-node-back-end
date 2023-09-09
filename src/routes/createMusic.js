@@ -34,9 +34,6 @@ router.post(
           .end(imageBuffer);
       });
     };
-    const imageUrl = await uploadImage(fieldImage.buffer);
-    console.log(imageUrl);
-
     const uploadMusic = (musicBuffer) => {
       return new Promise((resolve, reject) => {
         cloudinary.uploader
@@ -50,8 +47,8 @@ router.post(
           .end(musicBuffer);
       });
     };
-    const musicUrl = await uploadMusic(fieldMusic.buffer);
-    console.log(musicUrl);
+    
+    const [imageUrl, musicUrl] = await Promise.all([uploadImage(fieldImage.buffer), uploadMusic(fieldMusic.buffer)]);
 
     const newMusic = await prisma.music.create({
       data: {
