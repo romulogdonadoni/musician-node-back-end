@@ -16,13 +16,14 @@ enum Role {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
+  id       String     @id @default(uuid())
+  email    String     @unique
   username String
   password String
   image    String?
-  role     Role    @default(USER)
+  role     Role       @default(USER)
   album    Album[]
+  playlist Playlist[]
 
   @@map("user")
 }
@@ -42,15 +43,27 @@ model Album {
 }
 
 model Music {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   imageUrl    String
   authorName  String
   name        String
   description String
   releaseDate DateTime
   musicUrl    String
-  author      Album    @relation(fields: [authorId], references: [id])
+  author      Album     @relation(fields: [authorId], references: [id])
   authorId    String
+  playlist    Playlist? @relation(fields: [playlistId], references: [id])
+  playlistId  String?
 
   @@map("music")
+}
+
+model Playlist {
+  id       String  @id @default(uuid())
+  name     String
+  music    Music[]
+  author   User    @relation(fields: [authorId], references: [id])
+  authorId String
+
+  @@map("playlist")
 }
