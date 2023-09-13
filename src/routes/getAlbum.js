@@ -14,7 +14,11 @@ router.get("/get/album", async (req, res) => {
 router.get("/get/album/:id", async (req, res) => {
   const id = req.params["id"];
   try {
-    const resMusic = await prisma.album.findMany({ where: { id: id }, include: { music: true } });
+    const resMusic = await prisma.album.findMany({
+      where: { id: id },
+      include: { music: { include: { _count: { select: { musicViews: true } } } } },
+    });
+
     res.status(200).json(resMusic);
   } catch (error) {
     console.log(error);
