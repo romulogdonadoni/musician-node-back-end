@@ -68,18 +68,42 @@ router.post(
 
 router.post("/create/view/:id", authToken, async (req, res) => {
   const musicId = req.params["id"];
-  console.log(musicId);
   const token = req.headers["authorization"].split(" ")[1];
   const { id: authorId } = jwt.decode(token);
-  const { count } = req.body;
-  const newView = await prisma.musicViews.create({
-    data: {
-      authorId: authorId,
-      musicId: musicId,
-      count: count,
-    },
-  });
-  res.status(200).json(newView);
+
+  try {
+    const findView = await prisma.musicViews.findUnique({
+      where: {
+        musicId_authorId: {
+          musicId,
+          authorId,
+        },
+      },
+    });
+
+    if (findView) {
+      const newView = await prisma.musicViews.update({
+        where: {
+          musicId_authorId: {
+            musicId,
+            authorId,
+          },
+        },
+        data: { count: { increment: 1 } },
+      });
+      res.status(200).json(newView);
+    } else {
+      const newView = await prisma.musicViews.create({
+        data: {
+          authorId: authorId,
+          musicId: musicId,
+        },
+      });
+      res.status(200).json(newView);
+    }
+  } catch {
+    res.status(400).json({ msg: "Algo deu errado" });
+  }
 });
 
 router.get("/get/view/:id", authToken, async (req, res) => {
@@ -88,23 +112,6 @@ router.get("/get/view/:id", authToken, async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
   const { id: authorId } = jwt.decode(token);
   const newView = await prisma.musicViews.count({ where: { musicId: musicId } });
-  res.status(200).json(newView);
-});
-
-router.patch("/update/view/:id", authToken, async (req, res) => {
-  const musicId = req.params["id"];
-
-  const token = req.headers["authorization"].split(" ")[1];
-  const { id: authorId } = jwt.decode(token);
-  const newView = await prisma.musicViews.update({
-    where: {
-      musicId_authorId: {
-        musicId,
-        authorId,
-      },
-    },
-    data: { count: { increment: 1 } },
-  });
   res.status(200).json(newView);
 });
 
