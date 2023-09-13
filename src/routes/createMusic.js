@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import multer from "multer";
 import cloudinary from "../config/cloudinaryConfig.js";
 import authToken from "./authToken.js";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -47,7 +48,7 @@ router.post(
           .end(musicBuffer);
       });
     };
-    
+
     const [imageUrl, musicUrl] = await Promise.all([uploadImage(fieldImage.buffer), uploadMusic(fieldMusic.buffer)]);
 
     const newMusic = await prisma.music.create({
@@ -64,5 +65,47 @@ router.post(
     res.status(200).json(newMusic);
   }
 );
+
+router.post("/create/view/:id", authToken, async (req, res) => {
+  const musicId = req.params["id"];
+  console.log(musicId);
+  const token = req.headers["authorization"].split(" ")[1];
+  const { id: authorId } = jwt.decode(token);
+  const { count } = req.body;
+  const newView = await prisma.musicViews.create({
+    data: {
+      authorId: authorId,
+      musicId: musicId,
+      count: count,
+    },
+  });
+  res.status(200).json(newView);
+});
+
+router.get("/get/view/:id", authToken, async (req, res) => {
+  const musicId = req.params["id"];
+
+  const token = req.headers["authorization"].split(" ")[1];
+  const { id: authorId } = jwt.decode(token);
+  const newView = await prisma.musicViews.count({ where: { musicId: musicId } });
+  res.status(200).json(newView);
+});
+
+router.patch("/update/view/:id", authToken, async (req, res) => {
+  const musicId = req.params["id"];
+
+  const token = req.headers["authorization"].split(" ")[1];
+  const { id: authorId } = jwt.decode(token);
+  const newView = await prisma.musicViews.update({
+    where: {
+      musicId_authorId: {
+        musicId,
+        authorId,
+      },
+    },
+    data: { count: { increment: 1 } },
+  });
+  res.status(200).json(newView);
+});
 
 export default router;
