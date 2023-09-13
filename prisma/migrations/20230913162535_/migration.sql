@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "musicviews" ALTER COLUMN "count" DROP NOT NULL,
+ALTER COLUMN "count" SET DEFAULT 1;

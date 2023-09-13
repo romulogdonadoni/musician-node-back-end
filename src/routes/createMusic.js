@@ -101,7 +101,8 @@ router.post("/create/view/:id", authToken, async (req, res) => {
       });
       res.status(200).json(newView);
     }
-  } catch {
+  } catch(error) {
+    console.log(error)
     res.status(400).json({ msg: "Algo deu errado" });
   }
 });
