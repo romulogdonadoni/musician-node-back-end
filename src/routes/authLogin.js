@@ -3,14 +3,13 @@ const router = express.Router();
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import jwt from "jsonwebtoken";
-import crypto from "crypto"
 
 router.post("/auth/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const resUser = await prisma.user.findFirst({ where: { username: username } });
+    const resUser = await prisma.user.findFirst({ where: { email: email } });
     if (resUser.password === password) {
-      const token = jwt.sign({ id: resUser.id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: resUser.id, username: resUser.username }, process.env.JWT_SECRET);
       res.status(200).json({ token: token });
     } else {
       res.status(401).json({ message: "Não autorizado" });

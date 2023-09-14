@@ -12,5 +12,15 @@ router.get("/get/music", async (req, res) => {
     res.status(400).json({ message: "algo deu errado!" });
   }
 });
+router.get("/get/music/:id", async (req, res) => {
+  const id = req.params["id"];
+  try {
+    const resMusic = await prisma.music.findUnique({ where: { id: id } }, { include: { _count: { select: { musicViews: true } } } });
+
+    res.status(200).json(resMusic);
+  } catch (error) {
+    res.status(400).json({ message: "algo deu errado!" });
+  }
+});
 
 export default router;
