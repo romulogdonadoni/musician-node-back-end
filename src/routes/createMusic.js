@@ -101,18 +101,20 @@ router.post("/create/view/:id", authToken, async (req, res) => {
       });
       res.status(200).json(newView);
     }
-  } catch(error) {
-    console.log(error)
+  } catch (error) {
+    console.log(error);
     res.status(400).json({ msg: "Algo deu errado" });
   }
 });
 
-router.get("/get/view/:id", authToken, async (req, res) => {
-  const musicId = req.params["id"];
-
+router.get("/get/music/favorite", authToken, async (req, res) => {
   const token = req.headers["authorization"].split(" ")[1];
   const { id: authorId } = jwt.decode(token);
-  const newView = await prisma.musicViews.count({ where: { musicId: musicId } });
+  const newView = await prisma.musicViews.findMany({
+    where: { authorId: authorId },
+    orderBy: { count: "desc" },
+    select: { count: true, music: true },
+  });
   res.status(200).json(newView);
 });
 
