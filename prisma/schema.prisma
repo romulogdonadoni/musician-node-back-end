@@ -51,6 +51,7 @@ model Music {
   description String
   releaseDate DateTime
   musicUrl    String
+  letter      Json?
   author      Album        @relation(fields: [authorId], references: [id])
   authorId    String
   playlist    Playlist?    @relation(fields: [playlistId], references: [id])
@@ -62,7 +63,7 @@ model Music {
 
 model MusicViews {
   id       String @id @default(uuid())
-  count    Int?    @default(1)
+  count    Int?   @default(1)
   music    Music  @relation(fields: [musicId], references: [id])
   musicId  String
   author   User   @relation(fields: [authorId], references: [id])
