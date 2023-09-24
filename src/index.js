@@ -14,9 +14,6 @@ import getArtist from "./routes/getArtist.js";
 import getAlbum from "./routes/getAlbum.js";
 import getPlayList from "./routes/getPlayList.js";
 
-import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger.json" assert { type: "json" };
-
 import cors from "cors";
 
 app.use(
@@ -24,8 +21,6 @@ app.use(
     origin: "*",
   })
 );
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use("/", authRegister, authLogin, getUsers, createMusic, createAlbum, createPlaylist, getMusic, getArtist, getAlbum, getPlayList);
