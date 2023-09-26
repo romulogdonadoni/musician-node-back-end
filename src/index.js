@@ -14,6 +14,8 @@ import getArtist from "./routes/getArtist.js";
 import getAlbum from "./routes/getAlbum.js";
 import getPlayList from "./routes/getPlayList.js";
 
+import search from "./routes/search.js";
+
 import cors from "cors";
 
 app.use(
@@ -23,6 +25,6 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/", authRegister, authLogin, getUsers, createMusic, createAlbum, createPlaylist, getMusic, getArtist, getAlbum, getPlayList);
+app.use("/", authRegister, authLogin, getUsers, createMusic, createAlbum, createPlaylist, getMusic, getArtist, getAlbum, getPlayList, search);
 
 app.listen(process.env.PORT, () => console.log(`Servidor rodando na porta ${process.env.PORT}`));
