@@ -20,7 +20,7 @@ model User {
   email      String       @unique
   username   String
   password   String
-  image      Bytes?
+  image      String?
   role       Role         @default(USER)
   album      Album[]
   playlist   Playlist[]
