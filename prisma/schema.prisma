@@ -20,11 +20,12 @@ model User {
   email      String       @unique
   username   String
   password   String
-  image      String?
+  image      Bytes?
   role       Role         @default(USER)
   album      Album[]
   playlist   Playlist[]
   musicViews MusicViews[]
+  library    Library?
 
   @@map("user")
 }
@@ -39,6 +40,8 @@ model Album {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    String
   music       Music[]
+  library     Library? @relation(fields: [libraryId], references: [id])
+  libraryId   String?
 
   @@map("album")
 }
@@ -52,13 +55,38 @@ model Music {
   releaseDate DateTime
   musicUrl    String
   letter      Json?
+  musicViews  MusicViews[]
   author      Album        @relation(fields: [authorId], references: [id])
   authorId    String
   playlist    Playlist?    @relation(fields: [playlistId], references: [id])
   playlistId  String?
-  musicViews  MusicViews[]
+  library     Library?     @relation(fields: [libraryId], references: [id])
+  libraryId   String?
 
   @@map("music")
+}
+
+model Playlist {
+  id        String   @id @default(uuid())
+  name      String
+  music     Music[]
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  library   Library? @relation(fields: [libraryId], references: [id])
+  libraryId String?
+
+  @@map("playlist")
+}
+
+model Library {
+  id       String     @id @default(uuid())
+  author   User       @relation(fields: [authorId], references: [id])
+  authorId String     @unique
+  music    Music[]
+  album    Album[]
+  playlist Playlist[]
+
+  @@map("library")
 }
 
 model MusicViews {
@@ -71,14 +99,4 @@ model MusicViews {
 
   @@unique(fields: [musicId, authorId], name: "musicId_authorId")
   @@map("musicviews")
-}
-
-model Playlist {
-  id       String  @id @default(uuid())
-  name     String
-  music    Music[]
-  author   User    @relation(fields: [authorId], references: [id])
-  authorId String
-
-  @@map("playlist")
 }
