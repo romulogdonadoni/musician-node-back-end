@@ -4,13 +4,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import multer from "multer";
 const upload = multer();
-
+import fs from 'fs'
 router.post("/auth/register", upload.single("image"), async (req, res) => {
   const { email, username, password, role } = req.body;
-  const fieldImage = req.file.buffer;
-  console.log(fieldImage);
+  const buffer = req.file.buffer
+
   try {
-    const newUser = await prisma.user.create({ data: { image: fieldImage, username: username, password: password, email: email, role: role } });
+    const newUser = await prisma.user.create({ data: { image: buffer, username: username, password: password, email: email, role: role } });
     try {
       await prisma.library.create({ data: { authorId: newUser.id } });
       res.status(200).json({ message: "Usuário criado com sucesso", user: newUser });

@@ -9,7 +9,7 @@ router.post("/auth/login", async (req, res) => {
   try {
     const resUser = await prisma.user.findFirst({ where: { email: email } });
     if (resUser.password === password) {
-      const token = jwt.sign({ id: resUser.id, username: resUser.username }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: resUser.id, username: resUser.username, image: resUser.image }, process.env.JWT_SECRET);
       res.status(200).json({ token: token });
     } else {
       res.status(401).json({ message: "Não autorizado" });
