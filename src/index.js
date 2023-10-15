@@ -7,6 +7,7 @@ import authLogin from "./routes/authLogin.js";
 import createMusic from "./routes/createMusic.js";
 import createAlbum from "./routes/createAlbum.js";
 import createPlaylist from "./routes/createPlaylist.js";
+import createComment from "./routes/createComment.js";
 
 import getUsers from "./routes/getUsers.js";
 import getMusic from "./routes/getMusic.js";
@@ -25,6 +26,20 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/", authRegister, authLogin, getUsers, createMusic, createAlbum, createPlaylist, getMusic, getArtist, getAlbum, getPlayList, search);
+app.use(
+  "/",
+  authRegister,
+  authLogin,
+  getUsers,
+  createMusic,
+  createAlbum,
+  createPlaylist,
+  createComment,
+  getMusic,
+  getArtist,
+  getAlbum,
+  getPlayList,
+  search
+);
 
 app.listen(process.env.PORT, () => console.log(`Servidor rodando na porta ${process.env.PORT}`));
