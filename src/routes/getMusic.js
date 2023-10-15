@@ -15,7 +15,10 @@ router.get("/get/music", async (req, res) => {
 router.get("/get/music/:id", async (req, res) => {
   const id = req.params["id"];
   try {
-    const resMusic = await prisma.music.findUnique({ where: { id: id } }, { include: { _count: { select: { musicViews: true } } } });
+    const resMusic = await prisma.music.findUnique(
+      { where: { id: id }, include: { comment: true } },
+      { include: { _count: { select: { musicViews: true } } } }
+    );
 
     res.status(200).json(resMusic);
   } catch (error) {

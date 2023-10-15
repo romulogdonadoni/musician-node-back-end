@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 const prisma = new PrismaClient();
 router.post("/create/comment/:musicId", authToken, async (req, res) => {
+    
   const token = req.headers.authorization.split(" ")[1];
   const musicId = req.params["musicId"];
   const { id: userId } = jwt.decode(token);
