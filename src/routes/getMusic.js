@@ -16,7 +16,7 @@ router.get("/get/music/:id", async (req, res) => {
   const id = req.params["id"];
   try {
     const resMusic = await prisma.music.findUnique(
-      { where: { id: id }, include: { comment: true } },
+      { where: { id: id }, include: { comment: { select: { user: { select: { username: true, image: true } }, comment: true } } } },
       { include: { _count: { select: { musicViews: true } } } }
     );
 
